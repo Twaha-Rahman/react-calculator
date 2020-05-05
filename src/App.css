@@ -25,6 +25,8 @@ body {
 #display {
   grid-column: span 4;
 
+  /* border: orangered 0.5px solid; */
+
   color: inherit;
 }
 
