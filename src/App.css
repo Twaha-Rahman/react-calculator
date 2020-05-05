@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@700&display=swap');
 
 body {
   margin: 0;
@@ -14,7 +14,8 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 
-  font-family: 'Rubik Mono One', sans-serif;
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-size: 2.5rem;
 
   background: #111111;
   color: white;
@@ -49,15 +50,12 @@ p {
   height: 70%;
 }
 
-.lower-display p {
-  font-size: 2.5rem;
-}
-
 .button {
   color: inherit;
   background: #111111;
   width: 100%;
   font-family: inherit;
+  font-size: inherit;
   border: 1px #191919 solid;
   outline: none;
 }
@@ -65,10 +63,6 @@ p {
 .ac-button {
   grid-column: span 2;
   background: #e53935;
-}
-
-.operator {
-  font-size: 125%;
 }
 
 #equals {
