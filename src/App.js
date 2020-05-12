@@ -34,15 +34,11 @@ function extractNumbers(str) {
 
   let filtered = extracted.filter((num) => {
     if (!isNaN(Number(num))) {
-      console.log(num);
-
       return true;
     } else {
       return false;
     }
   });
-
-  console.log(filtered);
 
   return filtered;
 }
@@ -67,7 +63,6 @@ function sum(currentNum, nextNum, oparetor) {
       break;
   }
 
-  console.log(...arguments, retVal);
   return retVal;
 }
 
@@ -93,8 +88,6 @@ function calc(equationString) {
     }
   }
 
-  console.log('Used Operators', usedOperators);
-
   let numbers = extractNumbers(equationString);
 
   let init = true;
@@ -114,7 +107,6 @@ function calc(equationString) {
     }
   }
 
-  console.log(equationString, usedOperators, numbers, result);
   return result;
 }
 
