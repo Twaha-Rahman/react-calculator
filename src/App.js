@@ -1,6 +1,52 @@
 import React, { useState } from 'react';
 import './App.css';
 
+function extractNumbers(str) {
+  const operators = ['+', '-', '/', '*'];
+
+  let chars = str.split('');
+
+  const notNums = [];
+
+  for (let index = 0; index < chars.length; index++) {
+    if (isNaN(Number(chars[index])) && chars[index] !== '.') {
+      notNums.push(index);
+    }
+  }
+
+  notNums.push(chars.length);
+
+  let extracted = [];
+  let last = 0;
+
+  notNums.forEach((num) => {
+    let numberFound;
+    if (chars[last - 1] === '-' && operators.includes(chars[last - 2])) {
+      numberFound = str.slice(last - 1, num);
+    } else {
+      numberFound = str.slice(last, num);
+    }
+    if (numberFound !== '') {
+      extracted.push(numberFound);
+    }
+    last = num + 1;
+  });
+
+  let filtered = extracted.filter((num) => {
+    if (!isNaN(Number(num))) {
+      console.log(num);
+
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  console.log(filtered);
+
+  return filtered;
+}
+
 function sum(currentNum, nextNum, oparetor) {
   let retVal = 0;
 
@@ -21,33 +67,35 @@ function sum(currentNum, nextNum, oparetor) {
       break;
   }
 
+  console.log(...arguments, retVal);
   return retVal;
 }
 
 function calc(equationString) {
   const operators = ['+', '-', '/', '*'];
-  const operatorsWithoutMinus = ['+', '/', '*'];
 
   const chars = equationString.split('');
   const usedOperators = [];
 
-  for (let index = 0; index < chars.length; index++) {
-    if (operators.includes(chars[index])) {
-      if (chars[index + 1]) {
-        if (!operators.includes(chars[index + 1]) || chars[index + 1] === '-') {
-          if (!operatorsWithoutMinus.includes(chars[index - 1])) {
-            usedOperators.push(chars[index]);
+  for (let i = 0; i < chars.length; i++) {
+    if (operators.includes(chars[i])) {
+      if (!operators.includes(chars[i + 1])) {
+        if (chars[i] === '-') {
+          if (operators.includes(chars[i - 1])) {
+            usedOperators.push(chars[i - 1]);
+          } else {
+            usedOperators.push(chars[i]);
           }
+        } else {
+          usedOperators.push(chars[i]);
         }
-      } else {
-        return false;
       }
     }
   }
 
-  let numbers = equationString.split(/[+/*]+/);
+  console.log('Used Operators', usedOperators);
 
-  console.log(usedOperators, numbers);
+  let numbers = extractNumbers(equationString);
 
   let init = true;
   let result = 0;
@@ -56,7 +104,9 @@ function calc(equationString) {
     if (init) {
       result += sum(Number(numbers[0]), Number(numbers[1]), usedOperators[0]);
     } else {
-      result += sum(Number(sum), Number(numbers[index + 1]), usedOperators[index]);
+      if (numbers[index + 1]) {
+        result = sum(Number(result), Number(numbers[index + 1]), usedOperators[index]);
+      }
     }
 
     if (index === 0) {
@@ -64,8 +114,11 @@ function calc(equationString) {
     }
   }
 
+  console.log(equationString, usedOperators, numbers, result);
   return result;
 }
+
+window.calc = calc;
 
 function App() {
   let [numberStr, setNumberStr] = useState('');
