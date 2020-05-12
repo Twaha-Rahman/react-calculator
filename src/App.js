@@ -1,16 +1,76 @@
 import React, { useState } from 'react';
 import './App.css';
 
+function sum(currentNum, nextNum, oparetor) {
+  let retVal = 0;
+
+  switch (oparetor) {
+    case '+':
+      retVal = currentNum + nextNum;
+      break;
+    case '-':
+      retVal = currentNum - nextNum;
+      break;
+    case '/':
+      retVal = currentNum / nextNum;
+      break;
+    case '*':
+      retVal = currentNum * nextNum;
+      break;
+    default:
+      break;
+  }
+
+  return retVal;
+}
+
 function calc(equationString) {
-  console.log(equationString);
-  return false;
+  const operators = ['+', '-', '/', '*'];
+  const operatorsWithoutMinus = ['+', '/', '*'];
+
+  const chars = equationString.split('');
+  const usedOperators = [];
+
+  for (let index = 0; index < chars.length; index++) {
+    if (operators.includes(chars[index])) {
+      if (chars[index + 1]) {
+        if (!operators.includes(chars[index + 1]) || chars[index + 1] === '-') {
+          if (!operatorsWithoutMinus.includes(chars[index - 1])) {
+            usedOperators.push(chars[index]);
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+  }
+
+  let numbers = equationString.split(/[+/*]+/);
+
+  console.log(usedOperators, numbers);
+
+  let init = true;
+  let result = 0;
+
+  for (let index = 0; index < usedOperators.length; index++) {
+    if (init) {
+      result += sum(Number(numbers[0]), Number(numbers[1]), usedOperators[0]);
+    } else {
+      result += sum(Number(sum), Number(numbers[index + 1]), usedOperators[index]);
+    }
+
+    if (index === 0) {
+      init = false;
+    }
+  }
+
+  return result;
 }
 
 function App() {
   let [numberStr, setNumberStr] = useState('');
 
   let [displayView, setDisplayView] = useState('');
-  //let [currentSign, setCurrentSign] = useState('');
 
   let res;
   if (displayView) {
@@ -214,7 +274,7 @@ function App() {
           if (!calculatedResult) {
             setDisplayView('Error!');
           } else {
-            setDisplayView(calculatedResult);
+            setDisplayView(calculatedResult.toString());
           }
         }}
         className="button operator"
